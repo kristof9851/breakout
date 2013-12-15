@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html manifest="/cache.manifest">
+<html>
 	<head>
-		<meta name="viewport" content="width=device-width">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="assets/css/style.css" />
         <script src="assets/js/lib/modernizr.custom.10429.js"></script>
 		<script src="assets/js/lib/jquery-2.0.3.min.js"></script>
@@ -238,7 +238,7 @@
                     if(Modernizr.localstorage){
                         var scores = JSON.parse(localStorage.highscores);
                         for(var i=0, l=scores.length; i<l; i++){
-                            highscoreList += '<div style="clear:both"><div style="float:left">#' + (i+1) + '</div><div style="float:right">' + scores[i] + 's</div></div>';
+                            highscoreList += '<div style="clear:both; min-height: 1em"><div style="float:left">#' + (i+1) + '</div><div style="float:right">' + scores[i] + 's</div></div>';
                         }
                     }
                     else{
