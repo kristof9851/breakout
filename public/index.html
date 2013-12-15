@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+		body, html {
+			background-color: black;
+			color: white;
+		</style>
+		<script src="assets/js/lib/jquery-2.0.3.min.js"></script>
+		<script>
+			var Scene = function(start){
+				// Default config
+				this.config = {
+					start: function(){
+						console.log('Undefined start() function');
+					}
+				};
+				// User config
+				this.config.start = start;
+				// Mandatory default config
+				this.config.container = $('<div></div>').css({
+					position: 'absolute'
+				});
+				// Behaviour definition
+				this.start = function(game){
+					game.getContainer().append(this.getContainer());
+					this.config.start(game);
+				}
+				// Getters/Setters
+				this.getContainer = function(){
+					return this.config.container;
+				}
+			};
+		
+			var Game = function(config){
+				// Default config
+				this.config = {
+					container: $('body').first()
+				};
+				// User config
+				//$.extend(this.config, config);
+				// Mandatory default config
+				$('html').css({
+					width: '100%',
+					height: '100%',
+					margin: '0',
+					padding: '0'
+				});
+				this.config.container.css({
+					width: '100%',
+					height: '100%',
+					margin: '0',
+					padding: '0',
+					position: 'relative'
+					// overflow: hidden
+				});
+				// Behaviour definition
+				this.start = function(scene){
+					scene.start(this);
+				}
+				// Getters/Setters
+				this.getContainer = function(){
+					return this.config.container;
+				}
+			};
+			
+			// -------------------------------------
+			
+			$(function(){
+				var game = new Game({});
+				var sceneMenu = function(game){
+					this.getContainer().append('<p>My first scene!</p>');
+					window.setTimeout(function(){
+						game.start(sceneEnd);
+					}, 3000);
+				};
+				var sceneEnd = new Scene(function(game){
+					this.getContainer().fadeOut().queue(function(){
+						$(this).getContainer().append('<p>My second scene!</p>').dequeue();
+					});
+				});
+				sceneMenu.call(Scene, Game);
+			})
+		</script>
+	</head>
+	<body></body>
+</html>

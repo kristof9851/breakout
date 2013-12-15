@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width">
+		<link href='http://fonts.googleapis.com/css?family=Electrolize' rel='stylesheet' type='text/css'>
+		<style>
+		html, body {
+			font-family: 'Electrolize', sans-serif;
+		}
+		#layer-logo {
+			text-align: center; 
+			position: absolute; 
+			top: 40%; 
+			width: 100%;
+			font-size: 3em;
+		}
+		#layer-menu {
+			width: 100%;
+			font-size: 3em;
+			position: absolute; 
+		}
+		#menu-logo {
+			width: 50%;
+			height: 3em;
+			line-height: 3em;
+			text-align: center;
+			margin: 4em auto 6em auto;
+			border: 1px solid white;
+		}
+		#menu-menu {
+			text-align: center;
+		}
+		.menu-button {
+			margin: 0 auto;
+			width: 40%;
+			background-color: white;
+			color: black;
+			padding: 0.1em;
+			margin-bottom: 0.2em;
+			cursor: pointer;
+			border: 1px solid white;
+		}
+		.menu-button:hover,
+		.menu-button:active {
+			background-color: black;
+			color: white;
+			border: 1px solid white;
+		}
+		</style>
+		<script src="assets/js/lib/jquery-2.0.3.min.js"></script>
+		<script>
+			var Layer = function(game){
+				// Default config
+				this.config = {
+					container: $('<div></div>').appendTo(game.getContainer()),
+					game: game
+				};
+				// Mandatory default config
+				this.config.container.css({
+					width: '100%',
+					height: '100%',
+					margin: '0',
+					padding: '0',
+					position: 'absolute',
+					overflow: 'hidden',
+					display: 'none',
+				});
+				// Getters/Setters
+				this.getContainer = function(){
+					return this.config.container;
+				};
+				this.getGame = function(){
+					return this.config.game;
+				};
+			};
+		
+			var Game = function(cssConfig){
+				// Default config
+				this.config = {
+					container: $('body').first()
+				};
+				// User config
+				this.config.container.css(cssConfig);
+				// Mandatory default config
+				$('html').css({
+					width: '100%',
+					height: '100%',
+					margin: '0',
+					padding: '0'
+				});
+				this.config.container.empty().css({
+					width: '100%',
+					height: '100%',
+					margin: '0',
+					padding: '0',
+					position: 'relative',
+					overflow: 'hidden'
+				});
+				// Behaviour definition
+				this.createLayer = function(cssConfig){
+					var l = new Layer(this);
+					l.getContainer().css(cssConfig);
+					return l;
+				};
+				// Getters/Setters
+				this.getContainer = function(){
+					return this.config.container;
+				};
+			};
+			
+			// -------------------------------------
+			
+			$(function(){
+				// Game
+				var game = new Game({
+					backgroundColor: '#000'
+				});
+				// Layer: logo
+				var layerLogo = game.createLayer({
+					backgroundColor: '#000',
+					color: 'white'
+				});
+				var layerLogoAction = function(){
+					this.getContainer()
+						.append('<div id="layer-logo">A KK Productions game</p>')
+						.fadeIn(2000)
+						.delay(2000)
+						.fadeOut(2000, function(){
+							layerMenuAction.call(layerMenu);
+						});
+				};
+				// Layer: menu
+				var layerMenu = game.createLayer({
+					backgroundColor: '#000',
+					color: 'white'
+				});
+				var layerMenuAction = function(){
+					var c = this.getContainer();
+					c.append('<div id="layer-menu">' +
+							'<div id="menu-logo">LOGO</div>' +
+							'<div id="menu-menu">' +
+								'<div class="menu-button" id="button-new-game">New Game</div>' + 
+								'<div class="menu-button" id="button-highscores">Highscores</div>' + 
+							'</div>' +
+						'</div>')
+						.fadeIn(1000);
+					
+					$('#button-new-game').click(function(){
+						c.fadeOut(1000, function(){
+							layerGameAction.call(layerGame);
+						});
+					});
+				};
+				// Layer: game
+				var layerGame = game.createLayer({
+					backgroundColor: '#000',
+					color: 'white'
+				});
+				var layerGameAction = function(){
+					this.getContainer()
+						.append('<div id="layer-logo">Play!</p>')
+						.fadeIn(1000);
+				};
+				// Start
+				layerLogoAction.call(layerLogo);
+				//layerMenuAction.call(layerMenu);
+			})
+		</script>
+	</head>
+	<body>Loading...</body>
+</html>

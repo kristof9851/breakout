@@ -1,0 +1,140 @@
+/* GENERIC */
+html, body {
+    font-family: 'Electrolize', sans-serif;
+}
+/* LOGO */
+#layer-logo {
+    text-align: center;
+    position: absolute;
+    top: 40%;
+    width: 100%;
+    font-size: 3em;
+}
+/* MENU */
+#layer-menu {
+    width: 100%;
+    font-size: 3em;
+    position: absolute;
+}
+#menu-logo {
+    width: 12em;
+    height: 3em;
+    line-height: 3em;
+    text-align: center;
+    margin: 4em auto 6em auto;
+    border: 1px solid white;
+}
+#menu-menu {
+    text-align: center;
+}
+.menu-button {
+    text-align: center;
+    margin: 0 auto;
+    width: 10em;
+    background-color: white;
+    color: black;
+    padding: 0.1em;
+    margin-bottom: 0.2em;
+    cursor: pointer;
+    border: 1px solid white;
+}
+.menu-button:hover,
+.menu-button:active {
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+}
+/* GAME */
+#game-racket {
+    height: 1em;
+    width: 10%;
+    background-color: white;
+    bottom: 4em;
+    position: absolute;
+    left: 45%;
+}
+#game-button-left {
+    position: absolute;
+    width: 50%;
+    left: 0;
+    right: 50%;
+    height: 100%;
+}
+#game-button-right {
+    position: absolute;
+    width: 50%;
+    left: 50%;
+    right: 0%;
+    height: 100%;
+}
+#game-ball {
+    position: absolute;
+    width: 1%;
+    height: auto;
+    left: 5%;
+    top: 45%;
+    background-color: red;
+}
+#game-left-edge {
+    position: absolute;
+    width: 1%;
+    left: -1%;
+    top: 0%;
+    height: 100%;
+}
+#game-right-edge {
+    position: absolute;
+    width: 1%;
+    left: 100%;
+    top: 0%;
+    height: 100%;
+}
+#game-bottom-edge {
+    position: absolute;
+    width: 100%;
+    left: 0%;
+    top: 100%;
+    height: 1%;
+}
+#game-top-edge {
+    position: absolute;
+    width: 100%;
+    left: 0%;
+    top: -1%;
+    height: 1%;
+}
+#game-timer {
+    position: absolute;
+    top: 1%;
+    left: 1%;
+    font-size: 3em;
+}
+/* WIN */
+#layer-win {
+    position: absolute;
+    left: 0%;
+    top: 0%;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 3em;
+    padding-top: 10em;
+}
+/**
+ * HIGHSCORES
+ */
+#layer-highscores {
+    width: 100%;
+    font-size: 3em;
+    position: absolute;
+}
+#highscores-title {
+    text-align: center;
+    margin: 2em 0em;
+    width: 100%;
+    font-size: 1.4em;
+}
+#highscores-list {
+    width: 10em;
+    margin: 0em auto 4em auto;
+}
