@@ -1,87 +1,272 @@
 <!DOCTYPE html>
-<html>
+<html manifest="/cache.manifest">
 	<head>
-		<style>
-		body, html {
-			background-color: black;
-			color: white;
-		</style>
+		<meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" href="assets/css/style.css" />
+        <script src="assets/js/lib/modernizr.custom.10429.js"></script>
 		<script src="assets/js/lib/jquery-2.0.3.min.js"></script>
+        <script src="assets/js/mini-game-struct/mgs.js"></script>
 		<script>
-			var Scene = function(start){
-				// Default config
-				this.config = {
-					start: function(){
-						console.log('Undefined start() function');
-					}
-				};
-				// User config
-				this.config.start = start;
-				// Mandatory default config
-				this.config.container = $('<div></div>').css({
-					position: 'absolute'
-				});
-				// Behaviour definition
-				this.start = function(game){
-					game.getContainer().append(this.getContainer());
-					this.config.start(game);
-				}
-				// Getters/Setters
-				this.getContainer = function(){
-					return this.config.container;
-				}
-			};
-		
-			var Game = function(config){
-				// Default config
-				this.config = {
-					container: $('body').first()
-				};
-				// User config
-				//$.extend(this.config, config);
-				// Mandatory default config
-				$('html').css({
-					width: '100%',
-					height: '100%',
-					margin: '0',
-					padding: '0'
-				});
-				this.config.container.css({
-					width: '100%',
-					height: '100%',
-					margin: '0',
-					padding: '0',
-					position: 'relative'
-					// overflow: hidden
-				});
-				// Behaviour definition
-				this.start = function(scene){
-					scene.start(this);
-				}
-				// Getters/Setters
-				this.getContainer = function(){
-					return this.config.container;
-				}
-			};
-			
-			// -------------------------------------
-			
 			$(function(){
-				var game = new Game({});
-				var sceneMenu = function(game){
-					this.getContainer().append('<p>My first scene!</p>');
-					window.setTimeout(function(){
-						game.start(sceneEnd);
-					}, 3000);
-				};
-				var sceneEnd = new Scene(function(game){
-					this.getContainer().fadeOut().queue(function(){
-						$(this).getContainer().append('<p>My second scene!</p>').dequeue();
-					});
+				// Game
+				var game = new Game({
+					backgroundColor: '#000'
 				});
-				sceneMenu.call(Scene, Game);
+				// Layer: logo
+				var layerLogo = game.createLayer({
+					backgroundColor: '#000',
+					color: 'white'
+				});
+				var layerLogoAction = function(){
+					var c = this.getContainer();
+                    c.append('<div id="layer-logo">A<br/><span style="font-size:1.5em">KK Productions</span><br/>game</div>')
+						.fadeIn(2000)
+						.delay(2000)
+						.fadeOut(2000, function(){
+                            c.empty();
+							layerMenuAction.call(layerMenu);
+						});
+				};
+				// Layer: menu
+				var layerMenu = game.createLayer({
+					backgroundColor: '#000',
+					color: 'white'
+				});
+				var layerMenuAction = function(){
+					var c = this.getContainer();
+					c.append(
+						'<div id="layer-menu">' +
+							'<div id="menu-logo">LOGO</div>' +
+							'<div id="menu-menu">' +
+								'<div class="menu-button" id="button-new-game">New Game</div>' + 
+								'<div class="menu-button" id="button-highscores">Highscores</div>' + 
+							'</div>' +
+						'</div>'
+					).fadeIn(1000);
+					
+					$('#button-new-game').click(function(){
+						c.fadeOut(1000, function(){
+                            c.empty();
+							layerGameAction.call(layerGame);
+						});
+					});
+                    $('#button-highscores').click(function(){
+                        c.fadeOut(1000, function(){
+                            c.empty();
+                            layerHighscoresAction.call(layerHighscores);
+                        });
+                    });
+				};
+				// Layer: game
+				var layerGame = game.createLayer({
+					backgroundColor: '#000',
+					color: 'white'
+				});
+				var layerGameAction = function(){
+					// Init
+					var c = this.getContainer();
+					c.append('<div id="game-left-edge"></div>')
+                        .append('<div id="game-right-edge"></div>')
+                        .append('<div id="game-top-edge"></div>')
+                        .append('<div id="game-bottom-edge"></div>')
+                        .append('<div id="game-timer">0.0</div>')
+                        .append('<img id="game-ball" src="assets/img/transparent_pixel.png" />')
+					    .append('<div id="game-racket"></div>')
+						.append('<div id="game-button-left"></div>')
+						.append('<div id="game-button-right"></div>')
+						.fadeIn(1000, function(){
+                            c.append('<div class="game-ready-sign">Get ready!</div>');
+                            $('div.game-ready-sign').fadeIn(3000)
+                                .delay(500)
+                                .fadeOut(500, function(){
+                                    // Config
+                                    var racket = $('#game-racket'), ball = $('#game-ball'), timer = $('#game-timer');
+                                    var leftEdge = $('#game-left-edge'), rightEdge = $('#game-right-edge'), topEdge = $('#game-top-edge'), bottomEdge = $('#game-bottom-edge');
+                                    var intervalLeft, intervalRight, intervalBall;
+                                    var racketSpeed = 1, updateMillisec = 20, racketLeft = 45, racketWidth = Math.round(c.width() / racket.width());
+                                    var ballSpeed = 0.5, ballLeft = 5, ballTop = 45, ballWidth = 1, ballDirection = 'BOTTOM-RIGHT';
+                                    // Button left
+                                    $('#game-button-left').mousedown(function(){
+                                        if(racketLeft > 0){
+                                            intervalLeft = setInterval(function(){
+                                                if(racketLeft > 0){
+                                                    racketLeft -= racketSpeed;
+                                                    racket.css({left: racketLeft + '%'});
+                                                }
+                                                else {
+                                                    $('#game-button-left').trigger('mouseup');
+                                                    racketLeft = 0;
+                                                    racket.css({left: '0%'});
+                                                }
+                                            }, updateMillisec);
+                                        }
+                                    });
+                                    $('#game-button-left').mouseup(function(){
+                                        clearInterval(intervalLeft);
+                                    });
+                                    // Button right
+                                    $('#game-button-right').mousedown(function(){
+                                        if(racketLeft < 100){
+                                            intervalRight = setInterval(function(){
+                                                if(racketLeft + racketWidth < 100){
+                                                    racketLeft += racketSpeed;
+                                                    racket.css({left: racketLeft + '%'});
+                                                }
+                                                else {
+                                                    $('#game-button-right').trigger('mouseup');
+                                                    racketLeft = 100 - racketWidth;
+                                                    racket.css({left: racketLeft + '%'});
+                                                }
+                                            }, updateMillisec);
+                                        }
+                                    });
+                                    $('#game-button-right').mouseup(function(){
+                                        clearInterval(intervalRight);
+                                    });
+                                    // Ball & Timer
+                                    intervalBall = setInterval(function(){
+                                        // Update timer
+                                        timer.text((parseFloat(timer.text()) + (updateMillisec/1000)).toFixed(2));
+                                        // Move ball
+                                        if(ballDirection == 'BOTTOM-RIGHT'){
+                                            ballLeft += ballSpeed;
+                                            ballTop += ballSpeed;
+                                        }
+                                        else if(ballDirection == 'BOTTOM-LEFT'){
+                                            ballLeft -= ballSpeed;
+                                            ballTop += ballSpeed;
+                                        }
+                                        else if(ballDirection == 'TOP-LEFT'){
+                                            ballLeft -= ballSpeed;
+                                            ballTop -= ballSpeed;
+                                        }
+                                        else if(ballDirection == 'TOP-RIGHT'){
+                                            ballLeft += ballSpeed;
+                                            ballTop -= ballSpeed;
+                                        }
+                                        ball.css({
+                                            left: ballLeft + '%',
+                                            top: ballTop + '%'
+                                        });
+                                        // Check collision
+                                        var collidedWith = Collision.collides(ball, [racket, leftEdge, rightEdge, topEdge, bottomEdge]);
+                                        if(collidedWith != false){
+                                            // Game over?
+                                            if(collidedWith == bottomEdge){
+                                                clearInterval(intervalBall);
+                                                layerWinAction.call(layerWin);
+                                            }
+                                            // Bounce off?
+                                            if(collidedWith == leftEdge){
+                                                if(ballDirection == 'BOTTOM-LEFT'){
+                                                    ballDirection = 'BOTTOM-RIGHT';
+                                                }
+                                                else if(ballDirection == 'TOP-LEFT'){
+                                                    ballDirection = 'TOP-RIGHT';
+                                                }
+                                            }
+                                            else if(collidedWith == rightEdge){
+                                                if(ballDirection == 'BOTTOM-RIGHT'){
+                                                    ballDirection = 'BOTTOM-LEFT';
+                                                }
+                                                else if(ballDirection == 'TOP-RIGHT'){
+                                                    ballDirection = 'TOP-LEFT';
+                                                }
+                                            }
+                                            else if(collidedWith == topEdge){
+                                                if(ballDirection == 'TOP-LEFT'){
+                                                    ballDirection = 'BOTTOM-LEFT';
+                                                }
+                                                else if(ballDirection == 'TOP-RIGHT'){
+                                                    ballDirection = 'BOTTOM-RIGHT';
+                                                }
+                                            }
+                                            else if(collidedWith == racket){
+                                                if(ballDirection == 'BOTTOM-LEFT'){
+                                                    ballDirection = 'TOP-LEFT';
+                                                }
+                                                else if(ballDirection == 'BOTTOM-RIGHT'){
+                                                    ballDirection = 'TOP-RIGHT';
+                                                }
+                                            }
+                                        }
+                                    }, updateMillisec);
+                                });
+                        });
+				};
+                // Layer: win
+                var layerWin = game.createLayer({
+                    color: 'white'
+                });
+                var layerWinAction = function(){
+                    var c = this.getContainer();
+                    c.append('<div id="layer-win">Game over dude!</div>')
+                        .fadeIn(2000);
+
+                    $('#layer-win').click(function(){
+                        // Add highscore
+                        if(Modernizr.localstorage){
+                            if($.isEmptyObject(localStorage.highscores)){
+                                localStorage.highscores = JSON.stringify([parseFloat($('#game-timer').text())]);
+                            }
+                            else{
+                                var scores = JSON.parse(localStorage.highscores);
+                                scores.push(parseFloat($('#game-timer').text()));
+                                scores.sort(function(a,b) { return a - b;});
+                                scores.reverse();
+                                scores = scores.slice(0,5);
+                                localStorage.highscores = JSON.stringify(scores);
+                            }
+                        }
+
+                        layerGame.getContainer().fadeOut(1000, function(){
+                            $(this).empty();
+                            c.fadeOut(1000, function(){
+                                $(this).empty();
+                                layerHighscoresAction.call(layerHighscores);
+                            });
+                        });
+                        $(this).unbind('click');
+                    });
+                };
+                // Layer: highscores
+                var layerHighscores = game.createLayer({
+                    color: 'white'
+                });
+                var layerHighscoresAction = function(){
+                    var highscoreList = '';
+                    if(Modernizr.localstorage){
+                        var scores = JSON.parse(localStorage.highscores);
+                        for(var i=0, l=scores.length; i<l; i++){
+                            highscoreList += '<div style="clear:both"><div style="float:left">#' + (i+1) + '</div><div style="float:right">' + scores[i] + 's</div></div>';
+                        }
+                    }
+                    else{
+                        highscoreList = 'HTML5 Web Storage is not supported...';
+                    }
+                    var c = this.getContainer();
+                    c.append('<div id="layer-highscores">' +
+                            '<div id="highscores-title">Highscores</div>' +
+                            '<div id="highscores-list">' + highscoreList + '</div>' +
+                            '<div style="clear:both;"></div>' +
+                            '<div class="menu-button" id="button-back-to-menu">Main Menu</div>' +
+                        '</div>')
+                        .fadeIn(2000);
+
+                    $('#button-back-to-menu').click(function(){
+                        c.fadeOut(1000, function(){
+                            c.empty();
+                            layerMenuAction.call(layerMenu);
+                        });
+                    });
+                };
+				// Start
+				layerLogoAction.call(layerLogo);
+        		//layerMenuAction.call(layerMenu);
+				//layerGameAction.call(layerGame);
+                //layerHighscoresAction.call(layerHighscores);
 			})
 		</script>
 	</head>
-	<body></body>
+	<body>Loading...</body>
 </html>

@@ -109,6 +109,14 @@ html, body {
     left: 1%;
     font-size: 3em;
 }
+.game-ready-sign {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 40%;
+    display: none;
+    font-size: 4em;
+}
 /* WIN */
 #layer-win {
     position: absolute;
