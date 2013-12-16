@@ -8,7 +8,6 @@
         <link rel="stylesheet" href="assets/css/jquery.mobile.structure-1.3.2.min.css" />
         <script src="assets/js/lib/modernizr.custom.10429.js"></script>
         <script src="assets/js/lib/jquery-2.0.3.min.js"></script>
-        <script src="assets/js/lib/jquery.mobile-1.3.2.min.js"></script>
         <script src="assets/js/mini-game-struct/mgs.js"></script>
         <script>
             $(function() {
@@ -46,13 +45,15 @@
                             '</div>'
                             ).fadeIn(1000);
 
-                    $('#button-new-game').on('tap', function() {
+                    $('#button-new-game').on('touchstart click', function(e) {
+                        e.preventDefault();
                         c.fadeOut(1000, function() {
                             c.empty();
                             layerGameAction.call(layerGame);
                         });
                     });
-                    $('#button-highscores').on('tap', function() {
+                    $('#button-highscores').on('touchstart click', function(e) {
+                        e.preventDefault();
                         c.fadeOut(1000, function() {
                             c.empty();
                             layerHighscoresAction.call(layerHighscores);
@@ -88,47 +89,49 @@
                                             var racketSpeed = 1, updateMillisec = 20, racketLeft = 42, racketWidth = 14;
                                             var ballSpeed = 0.5, ballLeft = 5, ballTop = 45, ballWidth = 1, ballDirection = 'BOTTOM-RIGHT';
                                             // Button left
-                                            $('#game-button-left').on('vmousedown', function() {
-                                                if (racketLeft > 0 && !intervalLeft && !intervalRight) {
+                                            $('#game-button-left').on('touchstart mousedown', function(e) {
+                                                e.preventDefault();
+                                                $('#game-button-right').trigger('touchend');
+                                                if (racketLeft > 0 && !intervalLeft) {
                                                     intervalLeft = setInterval(function() {
                                                         if (racketLeft > 0) {
                                                             racketLeft -= racketSpeed;
                                                             racket.css({left: racketLeft + '%'});
                                                         }
                                                         else {
-                                                            $('#game-button-left').trigger('vmouseup');
+                                                            $('#game-button-left').trigger('touchend');
                                                             racketLeft = 0;
                                                             racket.css({left: '0%'});
                                                         }
                                                     }, updateMillisec);
                                                 }
                                             });
-                                            $('#game-button-left').on('vmouseup vmouseout vmousecancel', function() {
+                                            $('#game-button-left').on('touchend mouseup', function() {
+                                                console.log('left UP');
                                                 clearInterval(intervalLeft);
-                                                clearInterval(intervalRight);
                                                 intervalLeft = undefined;
-                                                intervalRight = undefined;
                                             });
                                             // Button right
-                                            $('#game-button-right').on('vmousedown', function() {
-                                                if (racketLeft < 100 && !intervalLeft && !intervalRight) {
+                                            $('#game-button-right').on('touchstart mousedown', function(e) {
+                                                e.preventDefault();
+                                                $('#game-button-left').trigger('touchend');
+                                                if (racketLeft < 100 && !intervalRight) {
                                                     intervalRight = setInterval(function() {
                                                         if (racketLeft + racketWidth < 100) {
                                                             racketLeft += racketSpeed;
                                                             racket.css({left: racketLeft + '%'});
                                                         }
                                                         else {
-                                                            $('#game-button-right').trigger('vmouseup');
+                                                            $('#game-button-right').trigger('touchend');
                                                             racketLeft = 100 - racketWidth;
                                                             racket.css({left: racketLeft + '%'});
                                                         }
                                                     }, updateMillisec);
                                                 }
                                             });
-                                            $('#game-button-right').on('vmouseup vmouseout vmousecancel', function() {
-                                                clearInterval(intervalLeft);
+                                            $('#game-button-right').on('touchend mouseup', function() {
+                                                console.log('right UP');
                                                 clearInterval(intervalRight);
-                                                intervalLeft = undefined;
                                                 intervalRight = undefined;
                                             });
                                             // Ball & Timer
@@ -211,7 +214,8 @@
                     c.append('<div id="layer-win">Game over dude!</div>')
                             .fadeIn(2000);
 
-                    $('#layer-win').on('tap', function() {
+                    $('#layer-win').on('touchstart click', function(e) {
+                        e.preventDefault();
                         // Add highscore
                         if (Modernizr.localstorage) {
                             if ($.isEmptyObject(localStorage.highscores)) {
@@ -236,7 +240,7 @@
                                 layerHighscoresAction.call(layerHighscores);
                             });
                         });
-                        $(this).unbind('tap');
+                        $(this).unbind('touchstart click');
                     });
                 };
                 // Layer: highscores
@@ -268,7 +272,8 @@
                             '</div>')
                             .fadeIn(2000);
 
-                    $('#button-back-to-menu').on('tap', function() {
+                    $('#button-back-to-menu').on('touchstart click', function(e) {
+                        e.preventDefault();
                         c.fadeOut(1000, function() {
                             c.empty();
                             layerMenuAction.call(layerMenu);
@@ -276,9 +281,9 @@
                     });
                 };
                 // Start
-                layerLogoAction.call(layerLogo);
+                //layerLogoAction.call(layerLogo);
                 //layerMenuAction.call(layerMenu);
-                //layerGameAction.call(layerGame);
+                layerGameAction.call(layerGame);
                 //layerHighscoresAction.call(layerHighscores);
             })
         </script>
