@@ -1,58 +1,33 @@
-/* GENERIC */
+/**
+ * GENERIC 
+ */
 html, body {
     font-family: 'Electrolize', sans-serif;
-    font-size: 0.8em;
+    font-size: 1.2em;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
-/* LOGO */
+#game-container {
+    background-color: #000;
+}
+/**
+ * LOGO 
+ */
 #layer-logo {
     text-align: center;
     position: absolute;
     top: 40%;
     width: 100%;
-    font-size: 3em;
 }
-/* MENU */
-#layer-menu {
-    width: 100%;
-    font-size: 3em;
-    position: absolute;
-}
-#menu-logo {
-    width: 12em;
-    height: 3em;
-    line-height: 3em;
-    text-align: center;
-    margin: 4em auto 6em auto;
-    border: 1px solid white;
-}
-#menu-menu {
-    text-align: center;
-}
-.menu-button {
-    text-align: center;
-    margin: 0 auto;
-    width: 10em;
-    background-color: white;
-    color: black;
-    padding: 0.1em;
-    margin-bottom: 0.2em;
-    cursor: pointer;
-    border: 1px solid white;
-}
-.menu-button:hover,
-.menu-button:active {
-    background-color: black;
-    color: white;
-    border: 1px solid white;
-}
-/* GAME */
+/**
+ * GAME 
+ */
 #game-racket {
-    height: 1em;
-    width: 10%;
+    height: 0.5em;
+    width: 14%;
     background-color: white;
-    bottom: 4em;
+    bottom: 2em;
     position: absolute;
-    left: 45%;
+    left: 42%;
 }
 #game-button-left {
     position: absolute;
@@ -70,7 +45,7 @@ html, body {
 }
 #game-ball {
     position: absolute;
-    width: 1%;
+    width: 2%;
     height: auto;
     left: 5%;
     top: 45%;
@@ -106,9 +81,9 @@ html, body {
 }
 #game-timer {
     position: absolute;
-    top: 1%;
-    left: 1%;
-    font-size: 3em;
+    top: 2%;
+    left: 4%;
+    font-size: 1em;
 }
 .game-ready-sign {
     position: absolute;
@@ -116,9 +91,11 @@ html, body {
     text-align: center;
     top: 40%;
     display: none;
-    font-size: 4em;
+    font-size: 2em;
 }
-/* WIN */
+/**
+ * WIN 
+ */
 #layer-win {
     position: absolute;
     left: 0%;
@@ -126,15 +103,14 @@ html, body {
     width: 100%;
     height: 100%;
     text-align: center;
-    font-size: 3em;
-    padding-top: 10em;
+    font-size: 2em;
+    padding-top: 5em;
 }
 /**
  * HIGHSCORES
  */
 #layer-highscores {
     width: 100%;
-    font-size: 3em;
     position: absolute;
 }
 #highscores-title {
@@ -146,4 +122,58 @@ html, body {
 #highscores-list {
     width: 10em;
     margin: 0em auto 4em auto;
+}
+/**
+ * MENU 
+ */
+#layer-menu {
+    width: 100%;
+    position: absolute;
+}
+#menu-logo {
+    line-height: 1.5em;
+    text-align: center;
+    margin: 2em 2em 5em 2em;
+    border: 1px solid white;
+}
+#menu-menu {
+}
+.menu-button {
+    text-align: center;
+    width: 7em;
+    margin: 0 auto;
+    background-color: white;
+    color: black;
+    padding: 0.4em;
+    margin-bottom: 0.2em;
+    cursor: pointer;
+    border: 1px solid white;
+}
+.menu-button:hover,
+.menu-button:active {
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+}
+/**
+ * BLOCKER
+ */
+#blocker {
+   background-color: black;
+   color: white;
+   text-align: center;
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   top: 0%;
+   left: -1000%;
+}
+@media (orientation: landscape) {
+    /**
+     * BLOCKER
+     */
+    #blocker {
+        left: 0%;
+        padding-top: 30%;
+    }
 }

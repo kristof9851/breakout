@@ -23,21 +23,31 @@ var Layer = function(game){
     };
 };
 
-var Game = function(cssConfig){
+var Game = function(container){
     // Default config
     this.config = {
-        container: $('body').first()
+        container: container,
+        subContainer: $('<div id="sub-container"></div>')
     };
-    // User config
-    this.config.container.css(cssConfig);
     // Mandatory default config
-    $('html').css({
+    $('html, body').css({
         width: '100%',
         height: '100%',
         margin: '0',
         padding: '0'
     });
     this.config.container.empty().css({
+        width: '100%',
+        height: '100%',
+        margin: '0',
+        padding: '0',
+        top: 0,
+        left: 0,
+        position: 'absolute',
+        overflow: 'hidden'
+    });
+    this.config.container.append(this.config.subContainer);
+    this.config.subContainer.css({
         width: '100%',
         height: '100%',
         margin: '0',
@@ -53,7 +63,7 @@ var Game = function(cssConfig){
     };
     // Getters/Setters
     this.getContainer = function(){
-        return this.config.container;
+        return this.config.subContainer;
     };
 };
 
@@ -61,7 +71,7 @@ var Collision = {
     collides: function(subject, obstacles){
         // Empty?
         if($.isEmptyObject(obstacles)) {
-            return false
+            return false;
         }
 
         // Check collision with each obstacle
@@ -81,7 +91,7 @@ var Collision = {
             top: p.top,
             right: p.left + element.outerWidth(),
             bottom: p.top + element.outerHeight()
-        }
+        };
     },
     intersects: function(a, b) {
         if(a.bottom > b.top && a.top < b.bottom &&
